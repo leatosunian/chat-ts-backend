@@ -9,22 +9,24 @@ const createChatService = async (chat: Chat) => {
 }
 
 const getChatService = async ({params}:Request) => {
-    const chat = await ChatModel.find({$and:[{userOne: params.userOne},{userTwo:params.userTwo}]});
+    const chat = await ChatModel.find({
+        $and:[
+            {userOne: params.userOne},
+            {userTwo: params.userTwo}]}
+        );
     if(chat.length >= 1){
         const messages = await MessageModel.find({
             $or:[
                 {sentBy: params.userOne},
-                {sentBy:params.userTwo},
+                {sentBy: params.userTwo},
                 {sentTo: params.userOne},
-                {sentTo:params.userTwo}
+                {sentTo: params.userTwo}
             ]}
-        )
-
+        );
         return messages;
     } else {
-        return "No chat found."
+        return "No chat found.";
     }
-    
 }
 
 const deleteChatService  = async (params:string) => {
