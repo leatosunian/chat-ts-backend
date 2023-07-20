@@ -4,8 +4,8 @@ import { createChatService, getChatService, deleteChatService } from '../service
 
 const createChat = async ({body}: Request, res: Response) => {
     try {
-        const chat = await createChatService(body);
-        res.send({chat, msg: 'CHAT_CREATED_SUCCESSFULLY'}) ;
+        const response_data = await createChatService(body);
+        res.send({response_data, msg: 'CHAT_CREATED_SUCCESSFULLY'}) ;
     } catch (error) {
         handleError(res, 'ERROR_CHAT_CREATION');
     }
@@ -22,7 +22,7 @@ const getChat = async (req: Request, res: Response) => {
 
 const deleteChat = async ({params}: Request, res: Response) => {
     try {
-        const chat = await deleteChatService(params.chatID);
+        const response_data = await deleteChatService(params.chatID);
         res.send({msg: 'CHAT_DELETED_SUCCESSFULLY'}); 
     } catch (error) {
         handleError(res, 'ERROR_DELETE_CHAT');

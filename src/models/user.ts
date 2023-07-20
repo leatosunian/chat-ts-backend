@@ -9,11 +9,26 @@ const UserSchema = new Schema<User>(
         },
         email: {
             type: String,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String,
             required: true
         },
         phone: {
+            type: Number,
+            required: true,
+            unique: true
+        },
+        userInfo: {
             type: String,
-            required: true
+            required: false,
+            default: "Hi! I'm a new user."
+        },
+        profileImage: {
+            type: String,
+            required: false
         }
     },
     {
@@ -22,5 +37,5 @@ const UserSchema = new Schema<User>(
     }
 )
 
-const UserModel = model('chats', UserSchema);
+const UserModel = model('users', UserSchema);
 export default UserModel;
