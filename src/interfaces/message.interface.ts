@@ -3,4 +3,5 @@ export interface Message {
     sentBy: string;
     sentTo: string;
     chatID: string;
+    msgType: string;
 }

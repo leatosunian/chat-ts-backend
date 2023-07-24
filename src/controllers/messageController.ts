@@ -4,6 +4,7 @@ import {getMessagesService, sendMessageService, uploadMessageFileService} from '
 import { RequestExtended } from '../interfaces/reqExtended.interface'
 import { SendFile } from '../interfaces/sendfile.interface'
 
+
 const sendMessages = async ({body}: Request, res: Response) => {
     try {
         const response_data = await sendMessageService(body)
@@ -31,7 +32,12 @@ const uploadMessageFile = async (req: RequestExtended, res: Response) => {
             file_name: `${file?.filename}`,
             path,
             userId: `${user?.userId}`,
-            file_type: `${fileType}`
+            file_type: `${fileType}`,
+            msgType: 'file',
+            sentTo: `${req.body.sentTo}`,
+            sentBy: `${req.body.sentBy}`,
+            chatID: `${req.body.chatID}`,
+            text: ''
         }
         const response_data = await uploadMessageFileService(data)
         res.send({response_data, msg: 'FILE_UPLOAD_SUCCESSFULLY'}) 

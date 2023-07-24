@@ -18,6 +18,10 @@ const MessageSchema = new Schema<Message>(
         chatID: {
             type: String,
             required: true
+        },
+        msgType: {
+            type: String,
+            required: true
         }
     },
     {

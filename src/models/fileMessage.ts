@@ -18,6 +18,10 @@ const FileMessageSchema = new Schema<SendFile>(
         file_type: {
             type: String,
             required: true
+        },
+        chatID: {
+            type: String,
+            required: true
         }
     },
     {
@@ -26,5 +30,5 @@ const FileMessageSchema = new Schema<SendFile>(
     }
 )
 
-const FileMessageModel = model('file_message', FileMessageSchema);
+const FileMessageModel = model('file_messages', FileMessageSchema);
 export default FileMessageModel;
