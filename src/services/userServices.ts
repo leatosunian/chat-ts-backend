@@ -10,6 +10,7 @@ import { encrypt, verify } from "../utils/pwEncrypt.handle";
 import { jwtGen } from "../utils/jwtGen.handle";
 import { ProfileImage } from '../interfaces/profile_image.interface';
 import ProfileImageModel from '../models/profileImage';
+import { ObjectId } from "mongoose";
 
 
 const createUserService = async (authBody: User) => {
@@ -29,15 +30,48 @@ const createUserService = async (authBody: User) => {
 }
 
 const getUserAndChatsService = async ({params}:Request) => {
-    const user = await ChatModel.find({_id: params.userID});
+    type chatObject = {
+        userId: ObjectId | string,
+        name: string 
+        lastMsg: string
+    }
+    const user = await UserModel.find({_id: params.user});   
+    const user_data = user.at(0);
+    
     if(user.length >= 1){
         const user_chats = await ChatModel.find({
             $or:[
-                {userOne: params.userID},
-                {userTwo: params.userID}
+                {userOne: params.user},
+                {userTwo: params.user}
             ]}
         );
-        return user;
+
+        const chats = []
+        for(const chat of user_chats){
+            const chatObj: chatObject = {
+                userId: '',
+                name: '',
+                lastMsg: ''
+            }
+            const chatUserName = await UserModel.findOne({_id: chat.userTwo})
+            const chatLastMs = await MessageModel.find({
+                $and:[
+                    {sentBy: chat.userOne},
+                    {sentTo: chat.userTwo}
+                ]}
+            ).sort({_id:-1}).limit(1);
+            const chatLastMsg = chatLastMs.at(0)
+                
+            chatObj.userId = `${chatUserName?._id}`
+            chatObj.name = `${chatUserName?.name}`
+            chatObj.lastMsg = `${chatLastMsg?.text}`
+
+            chats.push(chatObj)
+        }
+             
+        console.log(chats); 
+        return {user_data, user_chats, chats};
+        
     } else {
         return "NO_USER_FOUND";
     }
