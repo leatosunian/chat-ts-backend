@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { handleError } from '../utils/error.handle'
-import { createChatService, getChatService, deleteChatService } from '../services/chatServices'
+import { createChatService, getChatService, deleteChatService, getChatDataService } from '../services/chatServices'
 
 const createChat = async ({body}: Request, res: Response) => {
     try {
@@ -13,8 +13,8 @@ const createChat = async ({body}: Request, res: Response) => {
 
 const getChat = async (req: Request, res: Response) => {
     try {
-        const chat_messages = await getChatService(req);
-        res.send({chat_messages, msg: 'CHAT_GET_SUCCESSFULLY'}); 
+        const response_data = await getChatService(req);
+        res.send({response_data, msg: 'CHAT_GET_SUCCESSFULLY'}); 
     } catch (error) {
         handleError(res, 'ERROR_GET_CHAT');
     }
@@ -29,8 +29,18 @@ const deleteChat = async ({params}: Request, res: Response) => {
     }
 }
 
+const getChatData = async (req: Request, res: Response) => {
+    try {
+        const response_data = await getChatDataService(req);
+        res.send(response_data); 
+    } catch (error) {
+        handleError(res, 'ERROR_DELETE_CHAT');
+    }
+}
+
 export {
     createChat,
     getChat,
-    deleteChat
+    deleteChat,
+    getChatData
 }

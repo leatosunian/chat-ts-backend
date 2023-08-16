@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { handleError } from '../utils/error.handle'
-import {getMessagesService, sendMessageService, uploadMessageFileService} from '../services/messageServices'
+import {getChatMessagesService, sendMessageService, uploadMessageFileService} from '../services/messageServices'
 import { RequestExtended } from '../interfaces/reqExtended.interface'
 import { SendFile } from '../interfaces/sendfile.interface'
 
@@ -14,9 +14,9 @@ const sendMessages = async ({body}: Request, res: Response) => {
     }
 }
 
-const getMessages = async ({params}: Request, res: Response) => {
+const getChatMessages = async ({params}: Request, res: Response) => {
     try {
-        const response_data = await getMessagesService(params.userID)
+        const response_data = await getChatMessagesService(params)
         res.send({response_data, msg: 'MESSAGES_GET_SUCCESSFULLY'}) 
     } catch (error) {
         handleError(res, 'ERROR_GET_MESSAGES')
@@ -48,6 +48,6 @@ const uploadMessageFile = async (req: RequestExtended, res: Response) => {
 
 export {
     sendMessages,
-    getMessages,
+    getChatMessages,
     uploadMessageFile
 }

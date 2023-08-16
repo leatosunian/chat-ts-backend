@@ -5,8 +5,8 @@ import multerMiddleware from "../middlewares/multerMiddleware"
 
 const router = Router()
 
-router.post('/user/create', checkAuth, createUser)
-router.post('/user/login', checkAuth, loginUser)
+router.post('/user/create', createUser)
+router.post('/user/login', loginUser)
 router.get('/user/get/:user', checkAuth, getUserAndChats)
 router.post('/user/update/profile-pic', checkAuth, multerMiddleware.single('profile-image'), uploadProfileImage)
 

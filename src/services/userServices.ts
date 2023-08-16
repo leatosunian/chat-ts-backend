@@ -48,29 +48,35 @@ const getUserAndChatsService = async ({params}:Request) => {
 
         const chats = []
         for(const chat of user_chats){
-            const chatObj: chatObject = {
+            let chatUserName 
+            let chatObj: chatObject = {
                 userId: '',
                 name: '',
                 lastMsg: ''
             }
-            const chatUserName = await UserModel.findOne({_id: chat.userTwo})
+            if(chat.userTwo === params.user){
+                chatUserName = await UserModel.findOne({_id: chat.userOne})
+            }
+            if(chat.userOne === params.user){
+                chatUserName = await UserModel.findOne({_id: chat.userTwo})
+            }
+            
+            
             const chatLastMs = await MessageModel.find({
                 $and:[
                     {sentBy: chat.userOne},
                     {sentTo: chat.userTwo}
-                ]}
-            ).sort({_id:-1}).limit(1);
-            const chatLastMsg = chatLastMs.at(0)
-                
+                ]
+            }).sort({_id:-1}).limit(1);
+            
+            const chatLastMsg = chatLastMs.at(0)    
             chatObj.userId = `${chatUserName?._id}`
             chatObj.name = `${chatUserName?.name}`
             chatObj.lastMsg = `${chatLastMsg?.text}`
 
             chats.push(chatObj)
         }
-             
-        console.log(chats); 
-        return {user_data, user_chats, chats};
+        return {user_data, chats};
         
     } else {
         return "NO_USER_FOUND";

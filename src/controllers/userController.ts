@@ -23,7 +23,7 @@ const editUser = async ({body}: Request, res: Response) => {
 
 const getUserAndChats = async (req: Request, res: Response) => {
     try {
-        const response_data = await getUserAndChatsService(req);
+        const response_data = await getUserAndChatsService(req);        
         res.send({response_data, msg: 'CHAT_GET_SUCCESSFULLY'}); 
     } catch (error) {
         handleError(res, 'ERROR_GET_CHAT');
