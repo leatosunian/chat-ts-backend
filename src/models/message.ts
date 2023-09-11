@@ -22,6 +22,10 @@ const MessageSchema = new Schema<Message>(
         msgType: {
             type: String,
             required: true
+        },
+        date: {
+            type: String,
+            required: true
         }
     },
     {

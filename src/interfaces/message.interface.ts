@@ -4,4 +4,5 @@ export interface Message {
     sentTo: string;
     chatID: string;
     msgType: string;
+    date: string;
 }

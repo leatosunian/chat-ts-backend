@@ -24,7 +24,9 @@ const getChatService = async ({params}:Request) => {
                     { userTwo: params.userOne } 
                 ] 
             } 
-    ]})
+    ]}) 
+    
+    const chatId = chat.at(0)?._id
     
     /*({
         $and:[
@@ -60,7 +62,7 @@ const getChatService = async ({params}:Request) => {
 
 
         const userTwoData = await UserModel.findById(params.userTwo)
-        return {userTwoData, messages};
+        return {userTwoData, chatId, messages};
     } else {
         return "No chat found.";
     }

@@ -46,6 +46,8 @@ const getUserAndChatsService = async ({params}:Request) => {
             ]}
         );
 
+        const chatID = user_chats.at(0)?._id
+
         const chats = []
         for(const chat of user_chats){
             let chatUserName 
@@ -69,14 +71,15 @@ const getUserAndChatsService = async ({params}:Request) => {
                 ]
             }).sort({_id:-1}).limit(1);
             
-            const chatLastMsg = chatLastMs.at(0)    
+            const chatLastMsg = chatLastMs.at(0) 
+               
             chatObj.userId = `${chatUserName?._id}`
             chatObj.name = `${chatUserName?.name}`
             chatObj.lastMsg = `${chatLastMsg?.text}`
 
             chats.push(chatObj)
         }
-        return {user_data, chats};
+        return {user_data, chats, chatID};
         
     } else {
         return "NO_USER_FOUND";
