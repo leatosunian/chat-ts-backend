@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { handleError } from '../utils/error.handle'
-import { createUserService, getUserAndChatsService, editUserService, loginUserService, uploadProfileImageService } from '../services/userServices'
+import { createUserService, getUserAndChatsService, editUserService, loginUserService, uploadProfileImageService, getUserService, getUserByPhoneService, } from '../services/userServices'
 import { ProfileImage } from '../interfaces/profile_image.interface';
 import { RequestExtended } from '../interfaces/reqExtended.interface';
+import { User } from '../interfaces/user.interface';
 
 const createUser = async ({body}: Request, res: Response) => {
     try {
@@ -16,8 +17,9 @@ const createUser = async ({body}: Request, res: Response) => {
 const editUser = async ({body}: Request, res: Response) => {
     try {
         const response_data = await editUserService(body);
+        res.send({response_data, msg: 'USER_EDIT_SUCCESFULLY'})
     } catch (error) {
-        handleError(res, 'ERROR_CHAT_CREATION');
+        handleError(res, 'ERROR_EDIT_USER');
     }
 }
 
@@ -29,6 +31,25 @@ const getUserAndChats = async (req: Request, res: Response) => {
         handleError(res, 'ERROR_GET_CHAT');
     }
 }
+
+const getUser = async (req: Request, res: Response) => {
+    try {
+        const response_data = await getUserService(req); 
+        res.send({response_data, msg: 'USER_GET_SUCCESSFULLY'}); 
+    } catch (error) {
+        handleError(res, 'ERROR_GET_USER');
+    }
+}
+
+const getUserByPhone = async (req: Request, res: Response) => {
+    try {
+        const response_data = await getUserByPhoneService(req); 
+        res.send({response_data, msg: 'USER_GET_SUCCESSFULLY'}); 
+    } catch (error) {
+        handleError(res, 'ERROR_GET_USER');
+    }
+}
+
 
 const loginUser = async ({body}: Request, res: Response) => {
     try {
@@ -57,10 +78,21 @@ const uploadProfileImage = async (req : RequestExtended, res: Response) => {
     }
 }
 
+/*const updateUserData = async (req : RequestExtended, res: Response) => {
+    try {
+        const {userId} = req.params
+        const response_data = await updateUserDataService(userId)
+    } catch (error) {
+        handleError(res, 'ERROR_UPDATE_USER_DATA');
+    }
+}*/
+
 export {
     createUser,
     getUserAndChats,
     editUser,
     loginUser,
-    uploadProfileImage
+    uploadProfileImage,
+    getUser,
+    getUserByPhone
 }

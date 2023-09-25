@@ -10,7 +10,7 @@ import { encrypt, verify } from "../utils/pwEncrypt.handle";
 import { jwtGen } from "../utils/jwtGen.handle";
 import { ProfileImage } from '../interfaces/profile_image.interface';
 import ProfileImageModel from '../models/profileImage';
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 
 
 const createUserService = async (authBody: User) => {
@@ -31,7 +31,8 @@ const createUserService = async (authBody: User) => {
 
 const getUserAndChatsService = async ({params}:Request) => {
     type chatObject = {
-        userId: ObjectId | string,
+        chatId: Types.ObjectId | undefined
+        userId: ObjectId | string
         name: string 
         lastMsg: string
     }
@@ -54,7 +55,8 @@ const getUserAndChatsService = async ({params}:Request) => {
             let chatObj: chatObject = {
                 userId: '',
                 name: '',
-                lastMsg: ''
+                lastMsg: '',
+                chatId: chatID
             }
             if(chat.userTwo === params.user){
                 chatUserName = await UserModel.findOne({_id: chat.userOne})
@@ -86,8 +88,27 @@ const getUserAndChatsService = async ({params}:Request) => {
     }
 }
 
-const editUserService = async ({body}: Request) => {
-    const editedUser = await UserModel.findOneAndUpdate({_id: body._id}, body, {
+const getUserService = async ({params}:Request) => {
+    const user = await UserModel.find({_id: params.user});   
+    const user_data = user.at(0);
+    if(user_data === undefined) {
+        return 'USER_NOT_FOUND'
+    }
+    return user_data
+}
+
+const getUserByPhoneService = async ({params}:Request) => {
+    const user = await UserModel.find({phone: params.phone})
+    const user_data = user.at(0);
+    if(user_data === undefined){
+        return 'USER_NOT_FOUND'
+    } else{
+        return user_data
+    }
+}
+
+const editUserService = async (req: User) => {
+    const editedUser = await UserModel.findOneAndUpdate({_id: req._id}, req, {
         new: true
     });
     return editedUser;
@@ -125,10 +146,16 @@ const uploadProfileImageService = async ({file_name, path, userId} : ProfileImag
     return file;
 }
 
+/*const updateUserDataService = async ({params}: Request) => {
+    const updatedUser = await UserModel.find
+}*/
+
 export {
     createUserService,
     getUserAndChatsService,
     editUserService,
     loginUserService,
-    uploadProfileImageService
+    uploadProfileImageService,
+    getUserService,
+    getUserByPhoneService
 }

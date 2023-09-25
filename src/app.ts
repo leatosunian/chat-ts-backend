@@ -35,15 +35,17 @@ socketServer.on("connection", (socket: Socket<ClientToServerEvents, ServerToClie
     })
     socket.on('clientMsg', (data) => {
         console.log('message received ' + data.msg + ' from '+ data.room);
-        
-        socket.to(data.room).emit('serverMsg', data)
-        console.log('message emited to client');
+        socket.to(data.room).emit('serverMsg', data)   
+        socket.emit('incomingMsgNotification', data)     
+    })
+    socket.on('clientNewChatCreated', (data) => {
+        console.log(data.userOne);
+        console.log(data.userTwo);
+        socket.emit('serverNewChatCreated', data)
         
     })
 });
 
-
-  
 /* MONGODB CONNECTION */
 connectDB().then(() => {
     console.log(`DB connected`)

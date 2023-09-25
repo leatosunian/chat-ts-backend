@@ -5,4 +5,5 @@ export interface User extends Auth {
     phone: number;
     userInfo: string;
     profileImage: string;
+    _id?: string
 }
